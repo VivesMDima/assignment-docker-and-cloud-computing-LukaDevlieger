@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+    depends_on:
+      - mongodb # Ensure MongoDB starts before the Node.js server
 
   web-server:
     build:
@@ -13,3 +15,17 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8080:80'
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - '27017:27017' # Expose MongoDB on port 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db # Persist data
+
+volumes:
+  mongo_data:
